@@ -8,13 +8,9 @@ contract Leaderboard {
         uint score;
         uint rank;
     }
-
     mapping(address => User) public users;
-
     address[] public leaderboard;
-
     uint public userCount;
-
     event UserRegistered(address indexed userAddress, uint id);
     event ScoreUpdated(
         address indexed userAddress,
@@ -22,7 +18,6 @@ contract Leaderboard {
         uint newRank
     );
     event LeaderboardUpdated();
-
     modifier onlyRegistered(address userAddress) {
         require(
             users[userAddress].userAddress != address(0),
@@ -52,9 +47,7 @@ contract Leaderboard {
         uint scoreIncrement
     ) public onlyRegistered(userAddress) {
         users[userAddress].score += scoreIncrement;
-
         updateLeaderboard();
-
         emit ScoreUpdated(
             userAddress,
             users[userAddress].score,
@@ -72,7 +65,6 @@ contract Leaderboard {
                 }
             }
         }
-
         uint currentRank = 0;
         uint lastScore = type(uint).max;
         for (uint i = 0; i < leaderboard.length; i++) {
@@ -83,7 +75,6 @@ contract Leaderboard {
             }
             users[userAddress].rank = currentRank;
         }
-
         emit LeaderboardUpdated();
     }
 
@@ -102,5 +93,9 @@ contract Leaderboard {
             "User not registered"
         );
         return users[userAddress];
+    }
+
+    function isUserRegistered(address userAddress) public view returns (bool) {
+        return users[userAddress].userAddress != address(0);
     }
 }
